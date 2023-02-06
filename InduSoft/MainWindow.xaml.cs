@@ -24,10 +24,12 @@ namespace InduSoft
 				GenerationReport();
 			}
 		}
+
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 			GenerationReport();
 		}
+
 		private void GenerationReport()
 		{
 			employees.Clear();
