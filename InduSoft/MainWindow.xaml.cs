@@ -9,8 +9,8 @@ namespace InduSoft
 {
 	public partial class MainWindow : Window
 	{
-		static string ConnectionStrings = ConfigurationManager.ConnectionStrings["Base"].ConnectionString;
-		private ObservableCollection<Employee> employees = new ObservableCollection<Employee>();
+		static readonly string _connectionStrings = ConfigurationManager.ConnectionStrings["Base"].ConnectionString;
+		private readonly ObservableCollection<Employee> _employees = new ObservableCollection<Employee>();
 
 		public MainWindow()
 		{
@@ -32,25 +32,24 @@ namespace InduSoft
 
 		private void GenerationReport()
 		{
-			employees.Clear();
+			_employees.Clear();
 
 			var department = DepartmentIdTextBox.Text;
 			var percent = PercentTextBox.Text;
-			int result;
 
-			if (String.IsNullOrEmpty(department) || String.IsNullOrEmpty(percent))
+			if (string.IsNullOrEmpty(department) || string.IsNullOrEmpty(percent))
 			{
 				MessageBox.Show("Поля \"ID отдела\" и \"Процент повышения ЗП\" не могут быть пустыми.");
 				return;
 			}
 
-			if (!int.TryParse(department, out result))
+			if (!int.TryParse(department, out _))
 			{
 				MessageBox.Show("Идентификатор отдела должен быть целым числом");
 				return;
 			}
 
-			if (!int.TryParse(percent, out result))
+			if (!int.TryParse(percent, out _))
 			{
 				MessageBox.Show("Процент должен быть числом");
 				return;
@@ -58,7 +57,7 @@ namespace InduSoft
 
 			try
 			{
-				using (SqlConnection connection = new SqlConnection(ConnectionStrings))
+				using (SqlConnection connection = new SqlConnection(_connectionStrings))
 				{
 					connection.Open();
 
@@ -74,7 +73,7 @@ namespace InduSoft
 						decimal oldSalary = Convert.ToDecimal(reader["OldSalary"]);
 						decimal newSalary = Convert.ToDecimal(reader["NewSalary"]);
 
-						employees.Add(new Employee()
+						_employees.Add(new Employee()
 						{
 							Id = id,
 							DepartmentId = departmentId,
@@ -85,7 +84,7 @@ namespace InduSoft
 						});
 					}
 
-					LVEmployees.ItemsSource = employees;
+					LVEmployees.ItemsSource = _employees;
 
 					reader.Close();
 
