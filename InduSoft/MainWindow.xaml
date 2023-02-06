@@ -1,0 +1,54 @@
+﻿<Window x:Class="InduSoft.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InduSoft"
+        mc:Ignorable="d"
+        Title="Отчёт" Height="450" Width="800">
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="550"/>
+                <ColumnDefinition Width="230"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="1">
+                <DockPanel HorizontalAlignment="Right">
+                    <Label>ID отдела:</Label>
+                    <TextBox
+                    Name="DepartmentIdTextBox" 
+                    Width="40" 
+                    Margin="10,0,1,0"
+                    VerticalAlignment="Center"
+                    KeyDown="OnKeyDownHandler"/>
+                </DockPanel>
+                <DockPanel HorizontalAlignment="Right">
+                    <Label>Процент повышения ЗП:</Label>
+                    <TextBox 
+                    Name="PercentTextBox" 
+                    Width="40" 
+                    Margin="10,0,1,0"
+                    VerticalAlignment="Center"
+                    KeyDown="OnKeyDownHandler"/>
+                </DockPanel>
+                <Button Content="Построить отчёт" Name="button" Click="Button_Click"
+                    FontSize="15"
+                    Width="150" Height="30" Margin="5"/>
+            </StackPanel>
+
+            <ListView Name="LVEmployees">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Header="ID Департамента"  DisplayMemberBinding="{Binding DepartmentId}"/>
+                        <GridViewColumn Header="ID Наставника" DisplayMemberBinding="{Binding ChiefId}"/>
+                        <GridViewColumn Header="Фамилия"  DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Старая зарплата"  DisplayMemberBinding="{Binding OldSalary}"/>
+                        <GridViewColumn Header="Новая зарплата"  DisplayMemberBinding="{Binding NewSalary}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+    </Grid>
+</Window>
