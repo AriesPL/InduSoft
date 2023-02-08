@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InduSoft"
         mc:Ignorable="d"
-        Title="Отчёт" Height="450" Width="800">
+        Title="Отчёт" Height="450" Width="800" ResizeMode="NoResize">
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -16,12 +16,13 @@
             <StackPanel Grid.Column="1">
                 <DockPanel HorizontalAlignment="Right">
                     <Label>ID отдела:</Label>
-                    <TextBox
-                    Name="DepartmentIdTextBox" 
+                    <ComboBox
+                    ItemsSource="{Binding DepartmentId}"   
+                    SelectionChanged="comboBox_SelectionChanged"
+                    Name="DepartmentIdComboBox" 
                     Width="40" 
                     Margin="10,0,1,0"
-                    VerticalAlignment="Center"
-                    KeyDown="OnKeyDownHandler"/>
+                    VerticalAlignment="Center"/>
                 </DockPanel>
                 <DockPanel HorizontalAlignment="Right">
                     <Label>Процент повышения ЗП:</Label>

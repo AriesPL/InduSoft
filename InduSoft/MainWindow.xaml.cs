@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace InduSoft
@@ -15,6 +17,34 @@ namespace InduSoft
 		public MainWindow()
 		{
 			InitializeComponent();
+			UpdateItems();
+		}
+
+		private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			_ = DepartmentIdComboBox.SelectedItem as Employee;
+		}
+
+		private void UpdateItems()
+		{
+			try
+			{
+				using (SqlConnection connection = new SqlConnection(_connectionStrings))
+				{
+					connection.Open();
+
+					SqlCommand sqlCommand = new SqlCommand("SELECT Id FROM Department", connection);
+					SqlDataAdapter sqlAdapter = new SqlDataAdapter(sqlCommand);
+					DataTable dataTable = new DataTable();
+					sqlAdapter.Fill(dataTable);
+					DepartmentIdComboBox.ItemsSource = dataTable.DefaultView;
+					DepartmentIdComboBox.DisplayMemberPath = "Id";
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"Произошла ошибка при построении отчета: {ex.Message}");
+			}
 		}
 
 		private void OnKeyDownHandler(object sender, KeyEventArgs e)
@@ -34,18 +64,11 @@ namespace InduSoft
 		{
 			_employees.Clear();
 
-			var department = DepartmentIdTextBox.Text;
 			var percent = PercentTextBox.Text;
 
-			if (string.IsNullOrEmpty(department) || string.IsNullOrEmpty(percent))
+			if (string.IsNullOrEmpty(DepartmentIdComboBox.Text) || string.IsNullOrEmpty(percent))
 			{
 				MessageBox.Show("Поля \"ID отдела\" и \"Процент повышения ЗП\" не могут быть пустыми.");
-				return;
-			}
-
-			if (!int.TryParse(department, out _))
-			{
-				MessageBox.Show("Идентификатор отдела должен быть целым числом");
 				return;
 			}
 
@@ -61,7 +84,7 @@ namespace InduSoft
 				{
 					connection.Open();
 
-					string sqlQuery = $"EXEC[dbo].[UPDATESALARYFORDEPARTMENT] @DepartmentId = {department}, @Percent = {percent}";
+					string sqlQuery = $"EXEC[dbo].[UPDATESALARYFORDEPARTMENT] @DepartmentId = {DepartmentIdComboBox.Text}, @Percent = {percent}";
 					SqlCommand command = new SqlCommand(sqlQuery, connection);
 					SqlDataReader reader = command.ExecuteReader();
 					while (reader.Read())
