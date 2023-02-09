@@ -33,12 +33,13 @@ namespace InduSoft
 				{
 					connection.Open();
 
-					SqlCommand sqlCommand = new SqlCommand("SELECT Id FROM Department", connection);
+					SqlCommand sqlCommand = new SqlCommand("SELECT Id, Name FROM Department", connection);
 					SqlDataAdapter sqlAdapter = new SqlDataAdapter(sqlCommand);
 					DataTable dataTable = new DataTable();
 					sqlAdapter.Fill(dataTable);
 					DepartmentIdComboBox.ItemsSource = dataTable.DefaultView;
-					DepartmentIdComboBox.DisplayMemberPath = "Id";
+					DepartmentIdComboBox.DisplayMemberPath = "Name";
+					DepartmentIdComboBox.SelectedValuePath = "Id";
 				}
 			}
 			catch (Exception ex)
@@ -84,7 +85,7 @@ namespace InduSoft
 				{
 					connection.Open();
 
-					string sqlQuery = $"EXEC[dbo].[UPDATESALARYFORDEPARTMENT] @DepartmentId = {DepartmentIdComboBox.Text}, @Percent = {percent}";
+					string sqlQuery = $"EXEC[dbo].[UPDATESALARYFORDEPARTMENT] @DepartmentId = {DepartmentIdComboBox.SelectedValue}, @Percent = {percent}";
 					SqlCommand command = new SqlCommand(sqlQuery, connection);
 					SqlDataReader reader = command.ExecuteReader();
 					while (reader.Read())

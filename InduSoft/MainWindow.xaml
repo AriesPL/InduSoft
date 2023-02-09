@@ -5,48 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InduSoft"
         mc:Ignorable="d"
-        Title="Отчёт" Height="450" Width="800" ResizeMode="NoResize">
+        Title="Отчёт" Height="450" Width="820" ResizeMode="NoResize">
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="550"/>
-                <ColumnDefinition Width="230"/>
+                <ColumnDefinition Width="250"/>
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="1">
-                <DockPanel HorizontalAlignment="Right">
-                    <Label>ID отдела:</Label>
+                <DockPanel>
+                    <Label>Отдел:</Label>
                     <ComboBox
-                    ItemsSource="{Binding DepartmentId}"   
-                    SelectionChanged="comboBox_SelectionChanged"
-                    Name="DepartmentIdComboBox" 
-                    Width="40" 
-                    Margin="10,0,1,0"
-                    VerticalAlignment="Center"/>
+                        ItemsSource="{Binding DepartmentId}"   
+                        SelectionChanged="comboBox_SelectionChanged"
+                        Name="DepartmentIdComboBox" 
+                        Width="202"
+                        Margin="1,2,1,2"/>
                 </DockPanel>
-                <DockPanel HorizontalAlignment="Right">
+                <DockPanel>
                     <Label>Процент повышения ЗП:</Label>
                     <TextBox 
-                    Name="PercentTextBox" 
-                    Width="40" 
-                    Margin="10,0,1,0"
-                    VerticalAlignment="Center"
-                    KeyDown="OnKeyDownHandler"/>
+                        Name="PercentTextBox" 
+                        Width="101" 
+                        KeyDown="OnKeyDownHandler"
+                        Margin="1,2,1,2"/>
                 </DockPanel>
-                <Button Content="Построить отчёт" Name="button" Click="Button_Click"
-                    FontSize="15"
-                    Width="150" Height="30" Margin="5"/>
+                <Button Content="Построить отчёт" 
+                        x:Name="button" 
+                        Click="Button_Click"
+                        FontSize="15"
+                        Width="160" Height="30"/>
             </StackPanel>
 
-            <ListView Name="LVEmployees">
+            <ListView Name="LVEmployees" Height="414" VerticalAlignment="Center">
                 <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}"/>
-                        <GridViewColumn Header="ID Департамента"  DisplayMemberBinding="{Binding DepartmentId}"/>
-                        <GridViewColumn Header="ID Наставника" DisplayMemberBinding="{Binding ChiefId}"/>
-                        <GridViewColumn Header="Фамилия"  DisplayMemberBinding="{Binding Name}"/>
-                        <GridViewColumn Header="Старая зарплата"  DisplayMemberBinding="{Binding OldSalary}"/>
-                        <GridViewColumn Header="Новая зарплата"  DisplayMemberBinding="{Binding NewSalary}"/>
+                    <GridView >
+                        <GridViewColumn Header="ID"               
+                                        DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Header="ID Департамента"  
+                                        DisplayMemberBinding="{Binding DepartmentId}"/>
+                        <GridViewColumn Header="ID Наставника"    
+                                        DisplayMemberBinding="{Binding ChiefId}"/>
+                        <GridViewColumn Header="Фамилия"          
+                                        DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Старая зарплата" Width="120"  
+                                        DisplayMemberBinding="{Binding OldSalary}"/>
+                        <GridViewColumn Header="Новая зарплата" Width="120"  
+                                        DisplayMemberBinding="{Binding NewSalary}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
