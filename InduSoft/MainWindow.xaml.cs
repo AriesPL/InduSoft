@@ -25,29 +25,6 @@ namespace InduSoft
 			_ = DepartmentIdComboBox.SelectedItem as Employee;
 		}
 
-		private void UpdateItems()
-		{
-			try
-			{
-				using (SqlConnection connection = new SqlConnection(_connectionStrings))
-				{
-					connection.Open();
-
-					SqlCommand sqlCommand = new SqlCommand("SELECT Id, Name FROM Department", connection);
-					SqlDataAdapter sqlAdapter = new SqlDataAdapter(sqlCommand);
-					DataTable dataTable = new DataTable();
-					sqlAdapter.Fill(dataTable);
-					DepartmentIdComboBox.ItemsSource = dataTable.DefaultView;
-					DepartmentIdComboBox.DisplayMemberPath = "Name";
-					DepartmentIdComboBox.SelectedValuePath = "Id";
-				}
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show($"Произошла ошибка при построении отчета: {ex.Message}");
-			}
-		}
-
 		private void OnKeyDownHandler(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Return)
@@ -58,28 +35,26 @@ namespace InduSoft
 
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
+			_employees.Clear();
+			
 			GenerationReport();
 		}
 
 		private void GenerationReport()
 		{
-			_employees.Clear();
-
-			var percent = PercentTextBox.Text;
-
-			if (string.IsNullOrEmpty(DepartmentIdComboBox.Text) || string.IsNullOrEmpty(percent))
+			if (string.IsNullOrEmpty(DepartmentIdComboBox.Text) || string.IsNullOrEmpty(PercentTextBox.Text))
 			{
 				MessageBox.Show("Поля \"ID отдела\" и \"Процент повышения ЗП\" не могут быть пустыми.");
 				return;
 			}
-			
-			if (!int.TryParse(percent, out _))
+
+			if (!int.TryParse(PercentTextBox.Text, out _))
 			{
 				MessageBox.Show("Процент должен быть числом");
 				return;
 			}
 
-			if(int.Parse(percent) < 0 || int.Parse(percent) > 100)
+			if (int.Parse(PercentTextBox.Text) < 0 || int.Parse(PercentTextBox.Text) > 100)
 			{
 				MessageBox.Show("Процент должен быть от 0 до 100");
 				return;
@@ -91,7 +66,7 @@ namespace InduSoft
 				{
 					connection.Open();
 
-					string sqlQuery = $"EXEC[dbo].[UPDATESALARYFORDEPARTMENT] @DepartmentId = {DepartmentIdComboBox.SelectedValue}, @Percent = {percent}";
+					string sqlQuery = $"EXEC[dbo].[UPDATESALARYFORDEPARTMENT] @DepartmentId = {DepartmentIdComboBox.SelectedValue}, @Percent = {PercentTextBox.Text}";
 					SqlCommand command = new SqlCommand(sqlQuery, connection);
 					SqlDataReader reader = command.ExecuteReader();
 					while (reader.Read())
@@ -119,6 +94,29 @@ namespace InduSoft
 					reader.Close();
 
 					connection.Close();
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"Произошла ошибка при построении отчета: {ex.Message}");
+			}
+		}
+
+		private void UpdateItems()
+		{
+			try
+			{
+				using (SqlConnection connection = new SqlConnection(_connectionStrings))
+				{
+					connection.Open();
+
+					SqlCommand sqlCommand = new SqlCommand("SELECT Id, Name FROM Department", connection);
+					SqlDataAdapter sqlAdapter = new SqlDataAdapter(sqlCommand);
+					DataTable dataTable = new DataTable();
+					sqlAdapter.Fill(dataTable);
+					DepartmentIdComboBox.ItemsSource = dataTable.DefaultView;
+					DepartmentIdComboBox.DisplayMemberPath = "Name";
+					DepartmentIdComboBox.SelectedValuePath = "Id";
 				}
 			}
 			catch (Exception ex)
