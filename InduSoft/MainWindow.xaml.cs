@@ -72,10 +72,16 @@ namespace InduSoft
 				MessageBox.Show("Поля \"ID отдела\" и \"Процент повышения ЗП\" не могут быть пустыми.");
 				return;
 			}
-
+			
 			if (!int.TryParse(percent, out _))
 			{
 				MessageBox.Show("Процент должен быть числом");
+				return;
+			}
+
+			if(int.Parse(percent) < 0 || int.Parse(percent) > 100)
+			{
+				MessageBox.Show("Процент должен быть от 0 до 100");
 				return;
 			}
 
